@@ -18,4 +18,4 @@ RUN chmod +x /run.sh
 
 ENTRYPOINT /run.sh 
 
-EXPOSE 80
+EXPOSE 8080
