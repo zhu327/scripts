@@ -25,6 +25,7 @@ RUN set -ex && \
     chmod +x /usr/bin/v2ray/v2ctl && \
     chmod +x /usr/bin/v2ray/v2ray
 
+RUN cat /etc/v2ray/config.json
 CMD ["/usr/bin/v2ray/v2ray", "-config=/etc/v2ray/config.json"]
 
 EXPOSE 80
