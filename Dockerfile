@@ -16,7 +16,7 @@ COPY --from=builder /usr/bin/v2ray/v2ctl /usr/bin/v2ray/
 COPY --from=builder /usr/bin/v2ray/geoip.dat /usr/bin/v2ray/
 COPY --from=builder /usr/bin/v2ray/geosite.dat /usr/bin/v2ray/
 RUN mkdir /etc/v2ray && touch /etc/v2ray/config.json
-RUN echo -e "$CONFIG_JSON" > /etc/v2ray/config.json
+RUN echo '$CONFIG_JSON' >> /etc/v2ray/config.json
 
 RUN set -ex && \
     apk --no-cache add ca-certificates && \
