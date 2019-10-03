@@ -1,5 +1,9 @@
 # V2Ray Openshift
 
+## 致敬 & 变化
+
+致敬，bclswl0827，此 fork 版本使用官方 Dockerfile 作为基准，适配 OpenShift 环境
+
 ## 概述
 
 用于在 Openshift 上部署 V2Ray Websocket。
@@ -10,19 +14,13 @@
 
 ## 镜像
 
- - DockerHub 的镜像：`bclswl0827/v2ray-openshift`。
+ - DockerHub 的镜像：`infinicken/v2ray.openshift`。
  
 ## ENV 设定
 
 ### CONFIG_JSON
 
 `CONFIG_JSON` > `服务端 Websocket 配置文件`。
-
-### VER
-
-`VER` > `V2Ray 版本号`。
-
-如果不填，将默认为 4.15.0。
 
 ## 注意
 
