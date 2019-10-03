@@ -1,5 +1,5 @@
 FROM ubuntu:latest as builder
-ENV CONFIG_JSON=none
+ENV CONFIG_JSON=none PATH /usr/bin/v2ray:$PATH
 
 RUN apt-get update
 RUN apt-get install curl apt-utils -y
@@ -23,8 +23,6 @@ RUN set -ex && \
     mkdir /var/log/v2ray/ &&\
     chmod +x /usr/bin/v2ray/v2ctl && \
     chmod +x /usr/bin/v2ray/v2ray
-
-ENV PATH /usr/bin/v2ray:$PATH
 
 CMD ["v2ray", "-config=/etc/v2ray/config.json"]
 
