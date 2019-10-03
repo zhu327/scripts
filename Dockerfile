@@ -1,29 +1,21 @@
-FROM ubuntu:latest as builder
-ENV CONFIG_JSON=none
-
-RUN apt-get update
-RUN apt-get install curl apt-utils -y
-RUN curl -L -o /tmp/go.sh https://install.direct/go.sh
-RUN chmod +x /tmp/go.sh
-RUN /tmp/go.sh
-
 FROM alpine:latest
 
-LABEL maintainer "Darian Raymond <admin@v2ray.com>"
+ENV CONFIG_JSON=none
 
-COPY --from=builder /usr/bin/v2ray/v2ray /usr/bin/v2ray/
-COPY --from=builder /usr/bin/v2ray/v2ctl /usr/bin/v2ray/
-COPY --from=builder /usr/bin/v2ray/geoip.dat /usr/bin/v2ray/
-COPY --from=builder /usr/bin/v2ray/geosite.dat /usr/bin/v2ray/
-RUN mkdir /etc/v2ray && touch /etc/v2ray/config.json
-RUN echo -e '$CONFIG_JSON' > /etc/v2ray/config.json
+RUN apk add --no-cache --virtual .build-deps ca-certificates curl \
+ && mkdir -m 777 /v2ray \ 
+ && cd /v2ray \
+ && curl -L -H "Cache-Control: no-cache" -o v2ray.zip https://github.com/v2ray/v2ray-core/releases/download/v4.20.0/v2ray-linux-64.zip \
+ && unzip v2ray.zip \
+ && chmod +x /v2ray/v2ray /v2ray/v2ctl \ 
+ && rm -rf /v2ray/v2ray.zip /v2ray/v2ray.sig /v2ray/v2ctl.sig /v2ray/doc /v2ray/config.json /v2ray/vpoint_socks_vmess.json /v2ray/systemv /v2ray/systemd /v2ray/vpoint_vmess_freedom.json \
+ && chgrp -R 0 /v2ray \
+ && chmod -R g+rwX /v2ray 
 
-RUN set -ex && \
-    apk --no-cache add ca-certificates && \
-    mkdir /var/log/v2ray/ &&\
-    chmod +x /usr/bin/v2ray/v2ctl && \
-    chmod +x /usr/bin/v2ray/v2ray
+ADD run.sh /run.sh
 
-CMD ["/usr/bin/v2ray/v2ray", "-config=/etc/v2ray/config.json"]
+RUN chmod +x /run.sh 
+
+ENTRYPOINT /run.sh 
 
 EXPOSE 80
