@@ -1,4 +1,4 @@
-# V2Ray Openshift
+# V2Ray Kubernetes
 
 ## 致敬 & 变化
 
@@ -6,9 +6,9 @@
 
 ## 概述
 
-用于在 Openshift 上部署 V2Ray Websocket。
+用于在 Openshift, IBM Cloud 等云服务上部署 V2Ray Vmess & Websocket。
 
-**Openshift 为我们提供了免费的容器服务，我们不应该滥用它。正因如此，本项目不宜做为长期翻墙使用。**
+**Openshift, IBM Cloud 等服务商为我们提供了免费的容器服务进行测试，我们不应该滥用它。正因如此，本项目不宜做为生产环境使用。**
 
 **Openshift 的网络并不稳定，部署前请三思。**
 
