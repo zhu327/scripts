@@ -2,7 +2,7 @@
 
 ## 致敬 & 变化
 
-致敬，bclswl0827，此 fork 版本使用官方 Dockerfile 作为基准，适配 OpenShift 环境
+致敬，bclswl0827
 
 ## 概述
 
