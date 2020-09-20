@@ -18,9 +18,12 @@ spec:
         ports:
         - containerPort: 8080
           name: tcp
+        - containerPort: 8080
+          protocol: UDP
+          name: udp
         env:
           - name: CONFIG_JSON
-            value: '{"log": {"access": "none"}, "inbounds": [{"port": 8080, "protocol": "vless", "settings": {"decryption": "none", "clients": [{"id": "18ad2c9c-a88b-48e8-aa64-5dee0045c282"}]}, "streamSettings": {"network": "ws", "wsSettings": {"path": "ws"}}}], "outbounds": [{"protocol": "freedom", "settings": {}}]}'
+            value: '{"log": {"access": "none"}, "inbounds": [{"port": 8080, "protocol": "vless", "settings": {"decryption": "none", "clients": [{"id": "18ad2c9c-a88b-48e8-aa64-5dee0045c282"}]}, "streamSettings": {"network": "mkcp", "kcpSettings": {"uplinkCapacity": 5, "downlinkCapacity": 100, "congestion": true, "header": {"type": "utp"}}}}], "outbounds": [{"protocol": "freedom", "settings": {}}]}'
 ---
 apiVersion: v1
 kind: Service
@@ -32,6 +35,10 @@ spec:
   type: NodePort
   ports:
   - protocol: TCP
+    name: tcp
+    port: 8080
+    nodePort: 30080
+  - protocol: UDP
     name: tcp
     port: 8080
     nodePort: 30080
