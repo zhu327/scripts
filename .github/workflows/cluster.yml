@@ -36,3 +36,7 @@ jobs:
     - name: Create
       run: |
         ibmcloud ks cluster create classic -name $IKS_CLUSTER --zone sjc03
+
+    - name: Info
+      run: |
+        ibmcloud ks cluster ls
