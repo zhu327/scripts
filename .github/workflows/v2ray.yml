@@ -11,11 +11,10 @@ env:
   IBM_CLOUD_USERNAME: ${{ secrets.IBM_CLOUD_USERNAME }}
   IBM_CLOUD_PASSWORD: ${{ secrets.IBM_CLOUD_PASSWORD }}
   IKS_CLUSTER: mycluster
+  CLUSTER_WORKER_IP: demo
 
 jobs:
   setup-deploy:
-    env:
-      CLUSTER_WORKER_IP: ""
     name: Setup, Deploy
     runs-on: ubuntu-latest
     steps:
