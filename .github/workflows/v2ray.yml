@@ -14,6 +14,8 @@ env:
 
 jobs:
   setup-deploy:
+    env:
+      CLUSTER_WORKER_IP: ""
     name: Setup, Deploy
     runs-on: ubuntu-latest
     steps:
