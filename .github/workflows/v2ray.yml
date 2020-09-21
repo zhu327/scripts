@@ -18,15 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    - name: Checkout
+      uses: actions/checkout@v2
+
     - name: Setup
       # This step references the directory that contains the action.
       uses: ./.github/actions/ibmcloud
       with:
         username: $IBM_CLOUD_USERNAME
         password: $IBM_CLOUD_PASSWORD
-
-    - name: Checkout
-      uses: actions/checkout@v2
 
     - name: Deploy
       run: |
