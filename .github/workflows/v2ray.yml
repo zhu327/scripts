@@ -32,9 +32,9 @@ jobs:
       run: |
         ibmcloud ks cluster config --cluster $IKS_CLUSTER
         kubectl config current-context
-        kubectl create -f manifest.yml
+        kubectl apply -f manifest.yml
 
-    - name: notification
+    - name: Notify
       run: echo "::set-env name=CLUSTER_WORKER_IP::`ibmcloud ks worker ls --cluster $IKS_CLUSTER|awk 'END {print $2}'`" 
 
     - name: Send mail
