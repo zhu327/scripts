@@ -1,0 +1,35 @@
+name: Create New IKS Cluster
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+  schedule:
+    - cron: 0 20 15 * *  # At 20:00 on day-of-month 15
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  IBM_CLOUD_USERNAME: ${{ secrets.IBM_CLOUD_USERNAME }}
+  IBM_CLOUD_PASSWORD: ${{ secrets.IBM_CLOUD_PASSWORD }}
+  IKS_CLUSTER: mycluster
+
+jobs:
+  setup-create:
+    name: Setup, Create
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Setup
+      # This step references the directory that contains the action.
+      uses: ./.github/actions/ibmcloud
+      with:
+        username: $IBM_CLOUD_USERNAME
+        password: $IBM_CLOUD_PASSWORD
+
+    - name: Delete
+      # Delete old cluster
+      run: |
+        ibmcloud ks cluster rm --cluster $IKS_CLUSTER -f || echo "${IKS_CLUSTER} not exist"
+
+    - name: Create
+      run: |
+        ibmcloud ks cluster create classic -name $IKS_CLUSTER --zone sjc03

@@ -1,0 +1,51 @@
+name: Deploy v2ray to IKS
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+  schedule:
+    - cron: 0 21 15 * *  # At 21:00 on day-of-month 15
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  IBM_CLOUD_USERNAME: ${{ secrets.IBM_CLOUD_USERNAME }}
+  IBM_CLOUD_PASSWORD: ${{ secrets.IBM_CLOUD_PASSWORD }}
+  IKS_CLUSTER: mycluster
+
+jobs:
+  setup-deploy:
+    name: Setup, Deploy
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Setup
+      # This step references the directory that contains the action.
+      uses: ./.github/actions/ibmcloud
+      with:
+        username: $IBM_CLOUD_USERNAME
+        password: $IBM_CLOUD_PASSWORD
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Deploy
+      run: |
+        ibmcloud ks cluster config --cluster $IKS_CLUSTER
+        kubectl config current-context
+        kubectl create -f manifest.yml
+
+    - name: notification
+      run: echo "::set-env name=CLUSTER_WORKER_IP::`ibmcloud ks worker ls --cluster $IKS_CLUSTER|awk 'END {print $2}'`" 
+
+    - name: Send mail
+      uses: dawidd6/action-send-mail@v2
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{secrets.MAIL_USERNAME}}
+        password: ${{secrets.MAIL_PASSWORD}}
+        subject: New IKS Cluster IP
+        # Literal body:
+        body: $CLUSTER_WORKER_IP
+        to: zhu327@qq.com
+        from: Luke Skywalker # <user@example.com>

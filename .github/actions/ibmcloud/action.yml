@@ -1,0 +1,26 @@
+name: 'IBM Cloud'
+description: 'Setup Login IBM CLOUD'
+inputs:
+  username:
+    description: 'IBM Cloud Username'
+    required: true
+  password:
+    description: 'IBM Cloud Password'
+    required: true
+  region:
+    description: 'IBM Cloud Region'
+    required: false
+    default: 'us-south'
+runs:
+  using: "composite"
+  steps: 
+    - id: install-ibm-cloud-cli
+      run: |
+        curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+        ibmcloud --version
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f kubernetes-service
+      shell: bash
+    - id: authenticate-ibm-cloud-cli
+      run: ibmcloud login -u ${{ inputs.username }} -p ${{ inputs.password }} -r "${{ inputs.region }}" -g default
+      shell: bash
