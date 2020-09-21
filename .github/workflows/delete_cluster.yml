@@ -1,0 +1,38 @@
+name: Delete IKS Cluster
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+  schedule:
+    - cron: 0 19 15 * *  # At 19:00 on day-of-month 15
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  IBM_CLOUD_USERNAME: ${{ secrets.IBM_CLOUD_USERNAME }}
+  IBM_CLOUD_PASSWORD: ${{ secrets.IBM_CLOUD_PASSWORD }}
+  IKS_CLUSTER: mycluster
+
+jobs:
+  setup-delete:
+    name: Setup, Delete
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup
+      # This step references the directory that contains the action.
+      uses: ./.github/actions/ibmcloud
+      with:
+        username: $IBM_CLOUD_USERNAME
+        password: $IBM_CLOUD_PASSWORD
+
+    - name: Delete
+      # Delete old cluster
+      run: |
+        ibmcloud ks cluster rm --cluster $IKS_CLUSTER -f || echo "${IKS_CLUSTER} not exist"
+
+    - name: Info
+      run: |
+        ibmcloud ks cluster ls

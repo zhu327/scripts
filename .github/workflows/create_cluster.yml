@@ -28,11 +28,6 @@ jobs:
         username: $IBM_CLOUD_USERNAME
         password: $IBM_CLOUD_PASSWORD
 
-    - name: Delete
-      # Delete old cluster
-      run: |
-        ibmcloud ks cluster rm --cluster $IKS_CLUSTER -f || echo "${IKS_CLUSTER} not exist"
-
     - name: Create
       run: |
         ibmcloud ks cluster create classic -name $IKS_CLUSTER --zone sjc03
