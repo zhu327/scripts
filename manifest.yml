@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: v2ray-config
+data:
+  config.json: |-
+    {
+      "log": {
+        "access": "none"
+      },
+      "inbounds": [
+        {
+          "port": 8080,
+          "protocol": "vmess",
+          "settings": {
+            "decryption": "none",
+            "clients": [
+              {
+                "id": "18ad2c9c-a88b-48e8-aa64-5dee0045c282"
+              }
+            ]
+          },
+          "streamSettings": {
+            "network": "ws",
+            "wsSettings": {
+              "path": "ws"
+            }
+          }
+        },
+        {
+          "port": 8080,
+          "protocol": "vless",
+          "settings": {
+            "decryption": "none",
+            "clients": [
+              {
+                "id": "18ad2c9c-a88b-48e8-aa64-5dee0045c282"
+              }
+            ]
+          },
+          "streamSettings": {
+            "network": "mkcp",
+            "kcpSettings": {
+              "uplinkCapacity": 5,
+              "downlinkCapacity": 100,
+              "congestion": true,
+              "header": {
+                "type": "utp"
+              }
+            }
+          }
+        }
+      ],
+      "outbounds": [
+        {
+          "protocol": "freedom",
+          "settings": {}
+        }
+      ]
+    }      
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: v2ray-deployment
+spec:
+  selector:
+    matchLabels:
+      app: v2ray
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: v2ray
+    spec:
+      containers:
+      - name: v2ray
+        image: zhu327/v2ray
+        ports:
+          - containerPort: 8080
+            name: tcp
+          - containerPort: 8080
+            protocol: UDP
+            name: udp
+        env:
+        - name: CONFIG_JSON
+          valueFrom:
+            configMapKeyRef:
+              name: v2ray-config
+              key: config.json
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: v2ray-service
+spec:
+  selector:
+    app: v2ray
+  type: NodePort
+  ports:
+  - protocol: TCP
+    name: tcp
+    port: 8080
+    nodePort: 30080
+  - protocol: UDP
+    name: udp
+    port: 8080
+    nodePort: 30080
