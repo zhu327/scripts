@@ -47,6 +47,6 @@ jobs:
         password: ${{secrets.MAIL_PASSWORD}}
         subject: New IKS Cluster IP
         # Literal body:
-        body: $CLUSTER_WORKER_IP
+        body: ${CLUSTER_WORKER_IP}
         to: zhu327@qq.com
         from: Luke Skywalker # <user@example.com>
