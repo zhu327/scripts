@@ -78,7 +78,7 @@ spec:
     app: v2ray
   type: NodePort
   ports:
-    - protocol: UDP
-      name: udp
+    - name: udp
+      protocol: UDP
       port: 8080
       nodePort: 30080
