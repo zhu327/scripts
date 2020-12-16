@@ -30,7 +30,7 @@ jobs:
 
     - name: Create
       run: |
-        ibmcloud ks cluster create classic -name $IKS_CLUSTER --zone sjc03
+        ibmcloud ks cluster create classic -name $IKS_CLUSTER --zone dal10
 
     - name: Info
       run: |
