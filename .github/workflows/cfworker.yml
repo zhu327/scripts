@@ -38,3 +38,4 @@ jobs:
       with:
         apiKey: ${{ secrets.CF_API_KEY }}
         email: ${{ secrets.CF_EMAIL }}
+        workingDirectory: 'cf'
