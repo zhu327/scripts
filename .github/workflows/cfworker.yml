@@ -29,7 +29,9 @@ jobs:
         password: $IBM_CLOUD_PASSWORD
 
     - name: Preprocessing
-      run: bash cfrun.sh
+      run: |
+        ibmcloud ks cluster config --cluster $IKS_CLUSTER
+        bash cfrun.sh
 
     - name: Deploy
       uses: cloudflare/wrangler-action@1.3.0
