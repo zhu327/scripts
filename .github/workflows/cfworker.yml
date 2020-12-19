@@ -1,0 +1,38 @@
+name: Deploy Cloudflare Worker
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+  schedule:
+    - cron: 30 21 15 * *  # At 21:30 on day-of-month 15
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  IBM_CLOUD_USERNAME: ${{ secrets.IBM_CLOUD_USERNAME }}
+  IBM_CLOUD_PASSWORD: ${{ secrets.IBM_CLOUD_PASSWORD }}
+  IKS_CLUSTER: mycluster
+
+jobs:
+  setup-deploy:
+    name: Setup, Deploy
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup
+      # This step references the directory that contains the action.
+      uses: ./.github/actions/ibmcloud
+      with:
+        username: $IBM_CLOUD_USERNAME
+        password: $IBM_CLOUD_PASSWORD
+
+    - name: Preprocessing
+      run: bash cfrun.sh
+
+    - name: Deploy
+      uses: cloudflare/wrangler-action@1.3.0
+      with:
+        apiKey: ${{ secrets.CF_API_KEY }}
+        email: ${{ secrets.CF_EMAIL }}
