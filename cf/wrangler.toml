@@ -1,2 +1,4 @@
-name="sakura"
-type="javascript"
+name = "sakura"
+type = "javascript"
+account_id = "41997fdb90c4c87113b0483966b3a870"
+workers_dev = true
