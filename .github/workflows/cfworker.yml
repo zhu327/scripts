@@ -39,3 +39,16 @@ jobs:
         apiKey: ${{ secrets.CF_API_KEY }}
         email: ${{ secrets.CF_EMAIL }}
         workingDirectory: 'cf'
+
+    - name: Send mail
+      uses: dawidd6/action-send-mail@v2
+      with:
+        server_address: smtp.163.com
+        server_port: 465
+        username: ${{secrets.MAIL_USERNAME}}
+        password: ${{secrets.MAIL_PASSWORD}}
+        subject: tryCloudflare
+        # Read file contents as body:
+        body: file://domain.txt
+        to: zhu327@qq.com
+        from: Luke Skywalker
