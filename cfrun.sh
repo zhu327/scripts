@@ -4,4 +4,6 @@ domain=$(kubectl logs $pod_name -c tunnel|grep trycloudflare.com|awk 'END{print 
 
 sed -i "s/v2ray_host/$domain/g" ./cf/index.js
 
-echo $domain > domain.txt
+ip=$(ibmcloud ks worker ls --cluster $IKS_CLUSTER|awk 'END{print $2}')
+
+echo "$ip\n$domain" > ip.txt
