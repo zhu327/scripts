@@ -6,4 +6,4 @@ sed -i "s/v2ray_host/$domain/g" ./cf/index.js
 
 ip=$(ibmcloud ks worker ls --cluster $IKS_CLUSTER|awk 'END{print $2}')
 
-echo "$ip\n$domain" > ip.txt
+echo -e "$ip\n$domain" > ip.txt
