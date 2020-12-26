@@ -32,6 +32,9 @@ jobs:
       run: |
         ibmcloud ks cluster config --cluster $IKS_CLUSTER
         bash cfrun.sh
+      - uses: EndBug/add-and-commit@v6
+        with:
+          add: 'subscription.txt'
 
     - name: Deploy
       uses: cloudflare/wrangler-action@1.3.0
@@ -52,8 +55,3 @@ jobs:
         body: file://ip.txt
         to: zhu327@qq.com
         from: Luke Skywalker
-
-    - name: Subscription
-    - uses: EndBug/add-and-commit@v6
-      with:
-        add: 'subscription.txt'
