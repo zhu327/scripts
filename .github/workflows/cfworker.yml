@@ -32,9 +32,11 @@ jobs:
       run: |
         ibmcloud ks cluster config --cluster $IKS_CLUSTER
         bash cfrun.sh
-      - uses: EndBug/add-and-commit@v6
-        with:
-          add: 'subscription.txt'
+
+    - name: Commit changes
+      uses: EndBug/add-and-commit@v6
+      with:
+        add: 'subscription.txt'
 
     - name: Deploy
       uses: cloudflare/wrangler-action@1.3.0
