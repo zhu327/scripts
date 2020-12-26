@@ -30,8 +30,3 @@ if [ -f "subscription.txt" ];then
 fi
 
 echo -e "vmess://$(echo -e "$config" |base64 -w 0)"|base64 -w 0 > subscription.txt
-
-git add subscription.txt
-git config --global user.email "zhu327@gmail.com"
-git config --global user.name "zhu327"
-git commit -m "update subscription"
