@@ -25,9 +25,8 @@ config=$(cat <<EOF
 EOF
 )
 
-if[ -f 'subscription.txt' ]
-then
-  rm -i 'subscription.txt'
+if [ -f "subscription.txt" ];then
+  rm subscription.txt
 fi
 
 echo -e "vmess://$(echo -e "$config" |base64 -w 0)"|base64 -w 0 > subscription.txt
