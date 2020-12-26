@@ -7,26 +7,3 @@ sed -i "s/v2ray_host/$domain/g" ./cf/index.js
 ip=$(ibmcloud ks worker ls --cluster $IKS_CLUSTER|awk 'NR==3{print $2}')
 
 echo -e "$ip\n$domain" > ip.txt
-
-config=$(cat <<EOF
-{
-  "v": "2",
-  "ps": "ibm",
-  "add": "$ip",
-  "port": "30080",
-  "id": "18ad2c9c-a88b-48e8-aa64-5dee0045c282",
-  "aid": "0",
-  "net": "kcp",
-  "type": "wechat-video",
-  "host": "",
-  "path": "",
-  "tls": ""
-}
-EOF
-)
-
-if [ -f "subscription.txt" ];then
-  rm subscription.txt
-fi
-
-echo -e "vmess://$(echo -e "$config" |base64 -w 0)"|base64 -w 0 > subscription.txt
