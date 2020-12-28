@@ -38,6 +38,9 @@ jobs:
       with:
         add: 'subscribe.txt'
 
+    - name: Refresh CDN
+      run: curl https://purge.jsdelivr.net/gh/zhu327/v2ray-kubernetes/subscribe.txt
+
     - name: Deploy
       uses: cloudflare/wrangler-action@1.3.0
       with:
