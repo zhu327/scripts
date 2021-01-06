@@ -40,16 +40,3 @@ jobs:
 
     - name: Refresh CDN
       run: curl https://purge.jsdelivr.net/gh/zhu327/v2ray-kubernetes/subscribe.txt
-
-    - name: Send mail
-      uses: dawidd6/action-send-mail@v2
-      with:
-        server_address: smtp.163.com
-        server_port: 465
-        username: ${{secrets.MAIL_USERNAME}}
-        password: ${{secrets.MAIL_PASSWORD}}
-        subject: IKS New Cluster IP
-        # Read file contents as body:
-        body: file://mail.txt
-        to: zhu327@qq.com
-        from: Luke Skywalker

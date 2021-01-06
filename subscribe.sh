@@ -4,8 +4,6 @@ domain=$(kubectl logs $pod_name -c tunnel|grep trycloudflare.com|awk 'END{print 
 
 ip=$(ibmcloud ks worker ls --cluster $IKS_CLUSTER|awk 'NR==3{print $2}')
 
-echo -e "$ip\n$domain" > mail.txt
-
 sed -i "s/v2ray_ip/$ip/g" subscribe.py
 sed -i "s/v2ray_host/$domain/g" subscribe.py
 
