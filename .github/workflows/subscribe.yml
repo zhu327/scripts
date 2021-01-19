@@ -37,6 +37,3 @@ jobs:
       uses: EndBug/add-and-commit@v6
       with:
         add: 'subscribe.txt'
-
-    - name: Refresh CDN
-      run: curl https://purge.jsdelivr.net/gh/zhu327/v2ray-kubernetes/subscribe.txt
