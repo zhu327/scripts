@@ -1,6 +1,9 @@
 name: Make Subscribe
 
 on:
+  push:
+    paths:
+      - 'subscribe.py'
   workflow_dispatch:
   repository_dispatch:
   schedule:
