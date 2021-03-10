@@ -17,7 +17,7 @@ configs = [{
 }, {
     "v": "2",
     "ps": "cf",
-    "add": "104.21.236.202",
+    "add": "v2ray_host",
     "port": "443",
     "id": "18ad2c9c-a88b-48e8-aa64-5dee0045c282",
     "aid": "0",
