@@ -45,7 +45,7 @@ data:
               "downlinkCapacity": 100,
               "congestion": true,
               "header": {
-                "type": "wechat-video"
+                "type": "dtls"
               }
             }
           }
