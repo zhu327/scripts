@@ -105,3 +105,45 @@ spec:
       protocol: UDP
       port: 8080
       nodePort: 30080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udp2raw-deployment
+spec:
+  selector:
+    matchLabels:
+      app: udp2raw
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: udp2raw
+    spec:
+      hostNetwork: true
+      containers:
+        - name: udp2raw
+          image: jasperhale/udp2raw
+          securityContext:
+            privileged: true
+          command:
+            - ./udp2raw
+          args:
+            - '-s'
+            - '-l'
+            - '0.0.0.0:900'
+            - '-r'
+            - '$(V2RAY_SERVICE_SERVICE_HOST):$(V2RAY_SERVICE_SERVICE_PORT_UDP)'
+            - '-k'
+            - password
+            - '--cipher-mode'
+            - xor
+            - '--auth-mode'
+            - simple
+            - '--raw-mode'
+            - faketcp
+            - '--seq-mode'
+            - '3'
+            - '--lower-level'
+            - auto
+            - '--fix-gro'
