@@ -141,9 +141,10 @@ spec:
             - '--auth-mode'
             - simple
             - '--raw-mode'
-            - faketcp
+            - icmp
             - '--seq-mode'
             - '3'
-            - '--lower-level'
-            - auto
-            - '--fix-gro'
+            - '-a'
+            - '--keep-rule'
+            - '--sock-buf'
+            - '10240'
