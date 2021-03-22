@@ -1,0 +1,54 @@
+name: Deploy v2ray to HPVS
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+  schedule:
+    - cron: 0 18 0 * *  # At 21:00 on day-of-month 15
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  IBM_CLOUD_USERNAME: ${{ secrets.IBM_CLOUD_USERNAME }}
+  IBM_CLOUD_PASSWORD: ${{ secrets.IBM_CLOUD_PASSWORD }}
+  DNSPOD_TOKEN: ${{ secrets.DNSPOD_TOKEN }}
+  HPVS_NAME: MyHPVS
+
+jobs:
+  setup-deploy:
+    name: Setup, Deploy
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup
+      # This step references the directory that contains the action.
+      uses: ./.github/actions/ibmcloud
+      with:
+        username: $IBM_CLOUD_USERNAME
+        password: $IBM_CLOUD_PASSWORD
+
+    - name: Create HPVS
+      run: |
+        ibmcloud plugin install hpvs
+
+    - name: Set HPVS IP ENV
+      run: echo "HPVS_IP=$(ibmcloud hpvs instance $HPVS_NAME|grep 'Public IP'|awk {'print$4'})" >> $GITHUB_ENV
+
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: Dnspod
+      run: |
+        npm install ddnspod -g
+        echo "ddnspod --server 'dnspod.cn' --token '$DNSPOD_TOKEN' --domainName 'zhu327.vip' --subDomain 'blog' --ip '$HPVS_IP' --ttl 600" | bash
+
+    - name: Install XRAY
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+        command: bash <(curl -s https://gist.githubusercontent.com/zhu327/147f3237962c8dd069922cfb9d9b0490/raw/0d0fea7ce3c6e2a19951c1e0e969bea9017bed9b/xray.sh)
+        host: ${{ env.HPVS_IP }}
+        username: root
+        privateKey: ${{ secrets.PRIVATE_KEY}}
