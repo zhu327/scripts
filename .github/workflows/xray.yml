@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   repository_dispatch:
   schedule:
-    - cron: 0 18 0 * *  # At 21:00 on day-of-month 15
+    - cron: 0 18 15 * *  # At 21:00 on day-of-month 15
 
 # Environment variables available to all jobs and steps in this workflow
 env:
