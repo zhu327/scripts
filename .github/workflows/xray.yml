@@ -48,7 +48,7 @@ jobs:
     - name: Install XRAY
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: apt-get install curl && bash <(curl -s https://gist.githubusercontent.com/zhu327/147f3237962c8dd069922cfb9d9b0490/raw/0d0fea7ce3c6e2a19951c1e0e969bea9017bed9b/xray.sh)
+        command: apt-get install curl -y && bash <(curl -s https://gist.githubusercontent.com/zhu327/147f3237962c8dd069922cfb9d9b0490/raw/0d0fea7ce3c6e2a19951c1e0e969bea9017bed9b/xray.sh)
         host: ${{ env.HPVS_IP }}
         username: root
         privateKey: ${{ secrets.PRIVATE_KEY}}
