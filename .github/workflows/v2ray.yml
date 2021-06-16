@@ -28,8 +28,15 @@ jobs:
         username: $IBM_CLOUD_USERNAME
         password: $IBM_CLOUD_PASSWORD
 
-    - name: Deploy
+    - name: Init
       run: |
         ibmcloud ks cluster config --cluster $IKS_CLUSTER
         kubectl config current-context
-        kubectl apply -f manifest.yml
+
+    - name: Sleep for 30 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '30s'
+
+    - name: Deploy
+      run: kubectl apply -f manifest.yml
