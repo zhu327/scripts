@@ -37,7 +37,7 @@ jobs:
     - name: Sleep for 10m
       uses: jakejarvis/wait-action@master
       with:
-        time: '10m'
+        time: '15m'
 
     - name: Set HPVS IP ENV
       run: echo "HPVS_IP=$(ibmcloud hpvs instance $HPVS_NAME|grep 'Public IP'|awk {'print$4'})" >> $GITHUB_ENV
