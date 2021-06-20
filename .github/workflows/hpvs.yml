@@ -32,7 +32,7 @@ jobs:
         ibmcloud plugin install hpvs
         ibmcloud hpvs instance-delete $HPVS_NAME -f || echo 'not exists'
         ibmcloud resource reclamations|grep hpvs|awk {'print$1'}|xargs -I {} ibmcloud resource reclamation-delete {} -f
-        ibmcloud resource service-instance-create $HPVS_NAME hpvs lite-s dal13 -g default -p "{\"sshPublicKey\": \"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF1bp+1Smyj/nGOKs2RFxoq6t0TcIB+TEVXWoqeTe1AcK9n5YNvJudiz5mUL0wK4HK07gLmryp4dQyXd1VDam+Qi027X5krsqjmjyh2euv5k0NdoCljE2UCb18nqAJ22Lp2II1txB5pGH50bikVizSpfQSSnaAeXnppR0B97RwhJvDjktG9UwhyuXCD1yfU9RyybjvMtLCKnxp61LqAqlrLX8Hgbs2DyX8qrPGiDhp0/zOobCHibcNsh6zBn3+boH/jJNJF3wlDV+ycB6wNYpaeHMf8gY5v5RMBeBKkuHJnrUGA8mzG13N6h4ZLqabNZOTO5xwMtNXPd9euK/m0ooZ zhu32@Thinkpad\"}"
+        ibmcloud resource service-instance-create $HPVS_NAME hpvs lite-s syd01 -g default -p "{\"sshPublicKey\": \"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF1bp+1Smyj/nGOKs2RFxoq6t0TcIB+TEVXWoqeTe1AcK9n5YNvJudiz5mUL0wK4HK07gLmryp4dQyXd1VDam+Qi027X5krsqjmjyh2euv5k0NdoCljE2UCb18nqAJ22Lp2II1txB5pGH50bikVizSpfQSSnaAeXnppR0B97RwhJvDjktG9UwhyuXCD1yfU9RyybjvMtLCKnxp61LqAqlrLX8Hgbs2DyX8qrPGiDhp0/zOobCHibcNsh6zBn3+boH/jJNJF3wlDV+ycB6wNYpaeHMf8gY5v5RMBeBKkuHJnrUGA8mzG13N6h4ZLqabNZOTO5xwMtNXPd9euK/m0ooZ zhu32@Thinkpad\"}"
 
     - name: Sleep for 10m
       uses: jakejarvis/wait-action@master
@@ -49,7 +49,7 @@ jobs:
     - name: Dnspod
       run: |
         npm install ddnspod -g
-        echo "ddnspod --server 'dnspod.cn' --token '$DNSPOD_TOKEN' --domainName 'zhu327.vip' --subDomain 'blog' --ip '$HPVS_IP' --ttl 600" | bash
+        echo "ddnspod --server 'dnspod.cn' --token '$DNSPOD_TOKEN' --domainName 'zhu327.vip' --subDomain 'hpvs' --ip '$HPVS_IP' --ttl 600" | bash
 
     - name: Sleep for 2m
       uses: jakejarvis/wait-action@master
@@ -59,7 +59,7 @@ jobs:
     - name: Install XRAY
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: apt-get install curl -y && bash <(curl -s https://gist.githubusercontent.com/zhu327/147f3237962c8dd069922cfb9d9b0490/raw/7eda6dff0965d817b87f569088f5b518e20e83ff/xray.sh)
+        command: apt-get install curl -y && bash <(curl -s https://gist.githubusercontent.com/zhu327/404e6f0f086b86b346e1d5411ef87642/raw/62643c8f670b008c3de6d1a3b7f37d7b429a2c63/hpvs.sh)
         host: ${{ env.HPVS_IP }}
         username: root
         privateKey: ${{ secrets.PRIVATE_KEY}}
