@@ -26,12 +26,12 @@ cd ~
 
 echo -e '{"log":{"access":"none"},"inbounds":[{"port":8080,"protocol":"vless","settings":{"decryption":"none","clients":[{"id":"18ad2c9c-a88b-48e8-aa64-5dee0045c282"}]},"streamSettings":{"network":"ws","wsSettings":{"path":"ws"}}}],"outbounds":[{"protocol":"freedom","settings":{}}]}' > config.json
 
-nohup xray -config=./config.json &
+nohup xray -config=./config.json > xray.log 2>&1 &
 
 wget https://github.com/zhu327/v2ray-kubernetes/raw/master/cloudflare.tar.gz
 
 tar zxvf cloudflare.tar.gz
 
-nohup /usr/local/bin/cloudflared tunnel run xray &
+nohup /usr/local/bin/cloudflared tunnel run xray > cloudflared.log 2>&1 &
 
 exit 0
