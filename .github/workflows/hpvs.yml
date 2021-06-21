@@ -3,6 +3,8 @@ name: Deploy v2ray to HPVS
 on:
   workflow_dispatch:
   repository_dispatch:
+  schedule:
+    - cron: 0 20 15 * *  # At 20:00 on day-of-month 15
 
 # Environment variables available to all jobs and steps in this workflow
 env:
@@ -45,7 +47,7 @@ jobs:
     - name: Install XRAY
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: apt-get install curl -y && bash <(curl -s https://gist.githubusercontent.com/zhu327/404e6f0f086b86b346e1d5411ef87642/raw/2be7e67acecf89636b371e85c5666f69be82f300/hpvs.sh)
+        command: apt-get install curl -y && bash <(curl -s https://raw.githubusercontent.com/zhu327/v2ray-kubernetes/master/hpvs.sh)
         host: ${{ env.HPVS_IP }}
         username: root
         privateKey: ${{ secrets.PRIVATE_KEY}}
