@@ -37,29 +37,15 @@ jobs:
     - name: Sleep for 10m
       uses: jakejarvis/wait-action@master
       with:
-        time: '15m'
+        time: '20m'
 
     - name: Set HPVS IP ENV
       run: echo "HPVS_IP=$(ibmcloud hpvs instance $HPVS_NAME|grep 'Public IP'|awk {'print$4'})" >> $GITHUB_ENV
 
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '12.x'
-    - name: Dnspod
-      run: |
-        npm install ddnspod -g
-        echo "ddnspod --server 'dnspod.cn' --token '$DNSPOD_TOKEN' --domainName 'zhu327.vip' --subDomain 'hpvs' --ip '$HPVS_IP' --ttl 600" | bash
-
-    - name: Sleep for 2m
-      uses: jakejarvis/wait-action@master
-      with:
-        time: '2m'
-
     - name: Install XRAY
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: apt-get install curl -y && bash <(curl -s https://gist.githubusercontent.com/zhu327/404e6f0f086b86b346e1d5411ef87642/raw/62643c8f670b008c3de6d1a3b7f37d7b429a2c63/hpvs.sh)
+        command: apt-get install curl -y && bash <(curl -s https://gist.githubusercontent.com/zhu327/404e6f0f086b86b346e1d5411ef87642/raw/2be7e67acecf89636b371e85c5666f69be82f300/hpvs.sh)
         host: ${{ env.HPVS_IP }}
         username: root
         privateKey: ${{ secrets.PRIVATE_KEY}}
