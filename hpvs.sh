@@ -26,12 +26,49 @@ cd ~
 
 echo -e '{"log":{"access":"none"},"inbounds":[{"port":8080,"protocol":"vless","settings":{"decryption":"none","clients":[{"id":"18ad2c9c-a88b-48e8-aa64-5dee0045c282"}]},"streamSettings":{"network":"ws","wsSettings":{"path":"ws"}}}],"outbounds":[{"protocol":"freedom","settings":{}}]}' > config.json
 
-nohup xray -config=./config.json > xray.log 2>&1 &
-
 wget https://github.com/zhu327/v2ray-kubernetes/raw/master/cloudflare.tar.gz
 
 tar zxvf cloudflare.tar.gz
 
-nohup /usr/local/bin/cloudflared tunnel run xray > cloudflared.log 2>&1 &
+cat > /etc/systemd/system/xray.service << EOF
+[Unit]
+Description=Xray Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/xray -config=/root/config.json
+Restart=on-failure
+RestartPreventExitStatus=23
+LimitNPROC=10000
+LimitNOFILE=1000000
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+cat > /etc/systemd/system/cloudflared.service << EOF
+[Unit]
+Description=Cloudflare Tunnel
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/cloudflared tunnel run xray
+Restart=on-failure
+RestartPreventExitStatus=23
+LimitNPROC=10000
+LimitNOFILE=1000000
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable xray
+systemctl start xray
+systemctl enable cloudflared
+systemctl start cloudflared
 
 exit 0
