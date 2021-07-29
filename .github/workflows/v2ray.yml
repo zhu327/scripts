@@ -3,8 +3,8 @@ name: Deploy v2ray to IKS
 on:
   workflow_dispatch:
   repository_dispatch:
-  schedule:
-    - cron: 0 21 15 * *  # At 21:00 on day-of-month 15
+#  schedule:
+#    - cron: 0 21 15 * *  # At 21:00 on day-of-month 15
 
 # Environment variables available to all jobs and steps in this workflow
 env:
