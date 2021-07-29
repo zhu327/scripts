@@ -75,7 +75,7 @@ spec:
     spec:
       containers:
       - name: v2ray
-        image: zhu327/v2ray
+        image: yangshuo0505/v2ray
         ports:
           - containerPort: 8080
             name: tcp

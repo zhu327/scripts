@@ -10,7 +10,7 @@ on:
 env:
   IBM_CLOUD_USERNAME: ${{ secrets.IBM_CLOUD_USERNAME }}
   IBM_CLOUD_PASSWORD: ${{ secrets.IBM_CLOUD_PASSWORD }}
-  IKS_CLUSTER: mycluster
+  IKS_CLUSTER: ${{ secrets.IKS_CLUSTER }}
 
 jobs:
   setup-deploy:

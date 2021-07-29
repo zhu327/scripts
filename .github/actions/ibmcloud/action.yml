@@ -22,5 +22,5 @@ runs:
         ibmcloud plugin install -f kubernetes-service
       shell: bash
     - id: authenticate-ibm-cloud-cli
-      run: ibmcloud login -u ${{ inputs.username }} -p ${{ inputs.password }} -r "${{ inputs.region }}" -g default
+      run: ibmcloud login -u ${{ inputs.username }} -p ${{ inputs.password }} -r "${{ inputs.region }}" -g Default
       shell: bash
