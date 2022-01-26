@@ -1,0 +1,25 @@
+name: 'IBM Cloud'
+description: 'Setup Login IBM CLOUD'
+inputs:
+  apikey:
+    description: 'IBM Cloud Api Key'
+    required: true
+  region:
+    description: 'IBM Cloud Region'
+    required: false
+    default: 'us-south'
+  group:
+    description: 'IBM Cloud Resource Group'
+    required: true
+runs:
+  using: "composite"
+  steps: 
+    - id: install-ibm-cloud-cli
+      run: |
+        curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+        ibmcloud --version
+        ibmcloud config --check-version=false
+      shell: bash
+    - id: authenticate-ibm-cloud-cli
+      run: ibmcloud login --apikey ${{ inputs. apikey }} -r "${{ inputs.region }}" -g ${{ inputs.group }}
+      shell: bash

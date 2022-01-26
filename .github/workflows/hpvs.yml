@@ -1,0 +1,52 @@
+name: Deploy v2ray to HPVS
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+  # schedule:
+  #   - cron: 0 20 15 * *  # At 20:00 on day-of-month 15
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  HPVS_NAME: MyHPVS
+  IBM_CLOUD_APIKEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+  IBM_CLOUD_GROUP: Default
+
+jobs:
+  setup-deploy:
+    name: Setup, Deploy
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup
+      # This step references the directory that contains the action.
+      uses: ./.github/actions/ibmcloud
+      with:
+        apikey: $IBM_CLOUD_APIKEY
+        group: $IBM_CLOUD_GROUP
+
+    - name: Create HPVS
+      run: |
+        ibmcloud plugin install hpvs
+        ibmcloud hpvs instance-delete $HPVS_NAME -f || echo 'not exists'
+        ibmcloud resource reclamations|grep hpvs|awk {'print$1'}|xargs -I {} ibmcloud resource reclamation-delete {} -f
+        ibmcloud resource service-instance-create $HPVS_NAME hpvs lite-s syd01 -g $IBM_CLOUD_GROUP -p "{\"sshPublicKey\": \"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF1bp+1Smyj/nGOKs2RFxoq6t0TcIB+TEVXWoqeTe1AcK9n5YNvJudiz5mUL0wK4HK07gLmryp4dQyXd1VDam+Qi027X5krsqjmjyh2euv5k0NdoCljE2UCb18nqAJ22Lp2II1txB5pGH50bikVizSpfQSSnaAeXnppR0B97RwhJvDjktG9UwhyuXCD1yfU9RyybjvMtLCKnxp61LqAqlrLX8Hgbs2DyX8qrPGiDhp0/zOobCHibcNsh6zBn3+boH/jJNJF3wlDV+ycB6wNYpaeHMf8gY5v5RMBeBKkuHJnrUGA8mzG13N6h4ZLqabNZOTO5xwMtNXPd9euK/m0ooZ zhu32@Thinkpad\"}"
+
+    - name: Sleep for 10m
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '20m'
+
+    - name: Set HPVS IP ENV
+      run: echo "HPVS_IP=$(ibmcloud hpvs instance $HPVS_NAME|grep 'Public IP'|awk {'print$4'})" >> $GITHUB_ENV
+
+    - name: Install XRAY
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+        command: apt-get update && apt-get install curl -y && bash <(curl -s https://raw.githubusercontent.com/zhu327/v2ray-kubernetes/master/hpvs.sh)
+        host: ${{ env.HPVS_IP }}
+        username: root
+        privateKey: ${{ secrets.PRIVATE_KEY}}
