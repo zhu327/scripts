@@ -62,6 +62,8 @@ LimitNOFILE=1000000
 WantedBy=multi-user.target
 EOF
 
+sysctl -w net.core.rmem_max=2500000
+
 systemctl enable xray
 systemctl start xray
 systemctl enable cloudflared
